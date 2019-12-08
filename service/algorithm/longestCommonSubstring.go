@@ -1,6 +1,6 @@
 package algorithm
 
-import . "gifs/service/common"
+import . "eagle/service/common"
 
 // 求最长公共字串的长度
 // 最长公共子串（Longest Common Substring）指的是两个字符串中的最长公共子串，要求子串一定连续
@@ -8,7 +8,7 @@ type LongestCommonSubstring struct {
 
 }
 
-func (lcs *LongestCommonSubstring) Compute(str1 []Character, str2 []Character) int {
+func (lcs *LongestCommonSubstring) Compute(str1 []Char, str2 []Char) int {
 	size1 := len(str1)
 	size2 := len(str2)
 	if size1 == 0 || size2 == 0 {

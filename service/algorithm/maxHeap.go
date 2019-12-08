@@ -1,7 +1,7 @@
 package algorithm
 
 import (
-	"gifs/service/common"
+	"eagle/service/common"
 	"github.com/gogf/gf/container/garray"
 	"github.com/gogf/gf/container/glist"
 )

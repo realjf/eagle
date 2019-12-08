@@ -1,7 +1,7 @@
 package algorithm
 
 import (
-	. "gifs/service/common"
+	. "eagle/service/common"
 	"github.com/gogf/gf/util/gconv"
 	"math"
 )
@@ -10,7 +10,7 @@ import (
 type LongestCommonSubsequence struct {
 }
 
-func (lcs *LongestCommonSubsequence) Compute(str1 []Character, str2 []Character) int {
+func (lcs *LongestCommonSubsequence) Compute(str1 []Char, str2 []Char) int {
 	substringLength1 := len(str1)
 	substringLength2 := len(str2)
 
