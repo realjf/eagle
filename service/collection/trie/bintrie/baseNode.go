@@ -19,6 +19,18 @@ type BaseNode struct {
 	value interface{} // 节点代表的值
 }
 
+func NewBaseNode() *BaseNode {
+	return &BaseNode{}
+}
+
+func (b *BaseNode) Transition(path string, begin int) *BaseNode {
+	cur := NewBaseNode()
+	for i := begin; i < len(path); i++ {
+
+	}
+	return cur
+}
+
 
 
 

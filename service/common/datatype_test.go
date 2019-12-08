@@ -33,3 +33,12 @@ func TestCharacter_ToByte(t *testing.T) {
 	t.Log(String(s).CharAt(6).ToByte())
 	t.Fatal(String(s).CharAt(2).ToByte())
 }
+
+func TestString_Append(t *testing.T) {
+	var s String = NewString()
+	v := s.Append("hello, ")
+	v.Append("world")
+	v.Append("!我是")
+	t.Log(v.ToString())
+	t.FailNow()
+}

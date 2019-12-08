@@ -4,6 +4,7 @@ import (
 	"github.com/gogf/gf/text/gstr"
 	"github.com/gogf/gf/util/gconv"
 	"strings"
+	"unicode"
 )
 
 var (
@@ -17,6 +18,10 @@ type String string
 type Rune rune
 
 type V interface{}
+
+func NewString() String {
+	return String("")
+}
 
 // 转化为utf-8字符数组
 func (s String) ToCharArray() []Char {
@@ -61,6 +66,19 @@ func (s String) ToBytes() []byte {
 	return gconv.Bytes(string(s))
 }
 
+func (s *String) Append(v ...interface{}) *String {
+	sb := ""
+	for _, val := range v {
+		sb += gconv.String(val)
+	}
+	*s = String(string(*s)+sb)
+	return s
+}
+
+func (s *String) ToString() string {
+	return string(*s)
+}
+
 func (s Rune) ToString() string {
 	return gconv.String(string(s))
 }
@@ -83,6 +101,14 @@ func (c Char) ToInt() int {
 
 func (c Char) ToByte() byte {
 	return gconv.Byte(rune(c))
+}
+
+func (c Char) ToRune() rune {
+	return rune(c)
+}
+
+func (c Char) IsWhitespace() bool {
+	return unicode.IsSpace(c.ToRune())
 }
 
 type MapEntrySet map[string]interface{}

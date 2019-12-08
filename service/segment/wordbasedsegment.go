@@ -11,7 +11,7 @@ type WordBasedSegment struct {
 }
 
 // 生成一元词网
-func (wbs *WordBasedSegment) GenerateWordNet(wordNetStorage WordNet) {
+func (wbs *WordBasedSegment) GenerateWordNet(wordNetStorage *WordNet) {
 	charArray := wordNetStorage.CharArray
 	// 核心词典查询
 	searcher := coreDictionary.GCoreDictionary.Trie.GetSearcher3(charArray, 0)
