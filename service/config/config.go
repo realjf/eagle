@@ -1,5 +1,6 @@
 package config
 
+import "eagle/service/corpus/io"
 
 var (
 	GConfig *Config
@@ -49,7 +50,7 @@ type Config struct {
 	Normalization                               bool     // 是否执行字符正规化（繁体->简体，全角->半角，大写->小写），切换配置后必须删CustomDictionary.txt.bin缓存
 
 	// IO适配器（默认null，表示从本地文件系统读取），实现com.hankcs.hanlp.corpus.io.IIOAdapter接口
-	//IOAdapter io.IIOAdapter
+	IOAdapter io.IIOAdapter
 }
 
 func NewConfig() *Config {

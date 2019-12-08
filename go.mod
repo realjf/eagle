@@ -14,6 +14,7 @@ require (
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/sirupsen/logrus v1.4.2
 	github.com/tebeka/strftime v0.1.3 // indirect
+	github.com/willf/bitset v1.1.10 // indirect
 	golang.org/x/sys v0.0.0-20191204072324-ce4227a45e2e
 	google.golang.org/appengine v1.6.5 // indirect
 )

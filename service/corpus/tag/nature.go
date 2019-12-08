@@ -7,6 +7,16 @@ import (
 	"strings"
 )
 
+var (
+	GNature *Nature
+)
+
+func init() {
+	if GNature == nil {
+		GNature = NewNature("")
+	}
+}
+
 // 词性
 type Nature struct {
 	Bg *Nature // 区别语素

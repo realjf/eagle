@@ -1,6 +1,11 @@
 package mathUtility
 
-import . "eagle/service/segment/common"
+import (
+	"eagle/service/dictionary/coreBiGramTableDictionary"
+	. "eagle/service/segment/common"
+	"eagle/service/utility/predefine"
+	"math"
+)
 
 func Sum(vals ...int) int {
 	sum := 0
@@ -22,7 +27,14 @@ func CalculateWeight(from Vertex, to Vertex) float64 {
 	if frequency == 0 {
 		frequency = 1 // 防止发生除零错误
 	}
-	nTwoWordsFreq :=
+	nTwoWordsFreq := coreBiGramTableDictionary.GCoreBiGramTableDictionary.GetBiFrequency2(from.WordID, to.WordID)
+	var value float64 = -math.Log(
+		predefine.DSmoothingPara * float64(frequency) / float64(predefine.MAX_FREQUENCY) +
+			(1 - predefine.DSmoothingPara) * ((1 - predefine.DTemp) * float64(nTwoWordsFreq) / float64(frequency) + predefine.DTemp))
+	if value < 0.0 {
+		value = -value
+	}
+	return value
 }
 
 

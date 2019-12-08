@@ -59,7 +59,7 @@ func NewAttribute5(nature Nature) *Attribute {
 func (a *Attribute) Create(natureWithFrequency string) Attribute {
 	var param []string = strings.Split(natureWithFrequency, " ")
 	if len(param) % 2 != 0 {
-		nature := NewNature("").Create(gstr.TrimStr(natureWithFrequency, " "))
+		nature := GNature.Create(gstr.TrimStr(natureWithFrequency, " "))
 		if &nature == nil {
 			utils.Logger.Warning("使用字符串" + natureWithFrequency + "创建词条属性失败！")
 			return Attribute{}
@@ -70,7 +70,7 @@ func (a *Attribute) Create(natureWithFrequency string) Attribute {
 	attribute := NewAttribute(natureCount)
 	for i := 0; i < natureCount; i++ {
 		s := param[2*i]
-		attribute.Nature[i] = NewNature("").Create(s)
+		attribute.Nature[i] = GNature.Create(s)
 		attribute.Frequency[i] = gconv.Int(param[1 + 2 * i])
 		attribute.TotalFrequency += attribute.Frequency[i]
 	}
@@ -98,7 +98,7 @@ func (a *Attribute) CreateFromByteArray(byteArray ByteArray.ByteArray, natureInd
  * @deprecated 推荐使用Nature参数！
  */
 func (a *Attribute) GetNatureFrequency(nature string) int {
-	pos := NewNature("").Create(nature)
+	pos := GNature.Create(nature)
 	if &pos == nil {
 		return 0
 	}

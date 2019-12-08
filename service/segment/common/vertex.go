@@ -1,6 +1,7 @@
 package common
 
 import (
+	. "eagle/service/common"
 	. "eagle/service/corpus/tag"
 	"eagle/service/corpus/tag"
 	"eagle/service/dictionary"
@@ -34,7 +35,7 @@ func NewVertex(word string, realWord string, attribute dictionary.Attribute) *Ve
 
 func NewVertex2(word string, realWord string, attribute dictionary.Attribute, wordID int) *Vertex {
 	if &attribute == nil {
-		attribute = *dictionary.NewAttribute3(*NewNature("").N, 1)
+		attribute = *dictionary.NewAttribute3(*GNature.N, 1)
 	}
 	v := &Vertex{
 		RealWord: realWord,
@@ -48,9 +49,34 @@ func NewVertex2(word string, realWord string, attribute dictionary.Attribute, wo
 	return v
 }
 
+func NewVertex3(realWord string, attribute dictionary.Attribute) *Vertex {
+	return NewVertex("", realWord, attribute)
+}
+
+func NewVertex4(realWord string, attribute dictionary.Attribute, wordID int) *Vertex {
+	return NewVertex2("", realWord, attribute, wordID)
+}
+
+func NewVertex5() *Vertex {
+	return &Vertex{}
+}
+
+func NewVertex6(realWord string) *Vertex {
+	return NewVertex("", realWord, coreDictionary.GCoreDictionary.Get(realWord))
+}
+
+func NewVertex7(realWord Char, attribute dictionary.Attribute) *Vertex {
+	return NewVertex3(realWord.ToString(), attribute)
+}
+
 // 生成线程安全的起始节点
 func NewB() *Vertex {
 	return NewVertex2(predefine.TAG_BIGIN, " ", *dictionary.NewAttribute3(*NewNature("").Begin, predefine.MAX_FREQUENCY / 10), coreDictionary.GCoreDictionary.GetWordID(predefine.TAG_BIGIN))
+}
+
+// 生成线程安全的终止节点
+func NewE() *Vertex {
+	return NewVertex2(predefine.TAG_END, " ", *dictionary.NewAttribute3(*NewNature("").End, predefine.MAX_FREQUENCY / 10), coreDictionary.GCoreDictionary.GetWordID(predefine.TAG_END))
 }
 
 func (v *Vertex) CompileRealWord(realWord string, attribute dictionary.Attribute) string {

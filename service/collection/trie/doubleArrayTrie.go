@@ -2,12 +2,11 @@ package trie
 
 import (
 	"bytes"
+	"eagle/service/config"
 	"fmt"
 	"eagle/service/collection/ahocorasick"
 	. "eagle/service/common"
 	"eagle/service/corpus/io"
-	"eagle/service/corpus/io/byteArrayStream"
-	"eagle/service/entry"
 	"eagle/utils"
 	"eagle/service/utility/byteUtility"
 	ByteArrayStream "eagle/service/corpus/io/byteArrayStream"
@@ -282,7 +281,7 @@ func (dat *DoubleArrayTrie) Build2(key garray.Array, value []interface{}) int {
  * @param entrySet 注意此entrySet一定要是字典序的！否则会失败
  * @return
  */
-func (dat *DoubleArrayTrie) Build3(entrySet []MapEntrySet) int {
+func (dat *DoubleArrayTrie) Build3(entrySet []EntrySet) int {
 	keyList := garray.NewArray(true)
 	valueList := garray.New(true)
 
@@ -450,7 +449,7 @@ func (dat *DoubleArrayTrie) Load(path string, value glist.List) bool {
  * @return
  */
 func (dat *DoubleArrayTrie) Load2(path string, value []interface{}) bool {
-	if entry.GConfig.IOAdapter == nil {
+	if config.GConfig.IOAdapter == nil {
 		if !dat.loadBaseAndCheckByFileChannel(path) {
 			return false
 		}
@@ -522,10 +521,10 @@ func (dat *DoubleArrayTrie) Load5(path string) bool {
 
 func (dat *DoubleArrayTrie) loadBaseAndCheck(path string) bool {
 	var in *io.DataInputStream
-	if entry.GConfig.IOAdapter == nil {
+	if config.GConfig.IOAdapter == nil {
 		in = io.NewDataInputStream(path)
 	}else{
-		in, err := entry.GConfig.IOAdapter.Open(path)
+		in, err := config.GConfig.IOAdapter.Open(path)
 		if err != nil {
 			utils.Logger.Warning("open file ", path, " error")
 			return false
@@ -604,7 +603,7 @@ func (dat *DoubleArrayTrie) ExactMatchSearch2(key string, pos int, length int, n
  * @param nodePos  开始查找的位置（本参数允许从非根节点查询）
  * @return 查到的节点代表的value ID，负数表示不存在
  */
-func (dat *DoubleArrayTrie) ExactMatchSearch3(keyChars []Character, pos int, length int, nodePos int) int {
+func (dat *DoubleArrayTrie) ExactMatchSearch3(keyChars []Char, pos int, length int, nodePos int) int {
 	result := -1
 	b := dat.base[nodePos]
 	var p int
@@ -726,7 +725,7 @@ func (dat *DoubleArrayTrie) CommonPrefixSearchWithValue(key string) glist.List {
  * @param begin
  * @return
  */
-func (dat *DoubleArrayTrie) CommonPrefixSearchWithValue2(keyChars []Character, begin int) glist.List {
+func (dat *DoubleArrayTrie) CommonPrefixSearchWithValue2(keyChars []Char, begin int) glist.List {
 	length := len(keyChars)
 	result := glist.New(true)
 	b := dat.base[0]
@@ -821,7 +820,7 @@ func (dat *DoubleArrayTrie) Get(key string) interface{} {
 	return nil
 }
 
-func (dat *DoubleArrayTrie) Get2(key []Character) interface{} {
+func (dat *DoubleArrayTrie) Get2(key []Char) interface{} {
 	index := dat.ExactMatchSearch3(key, 0, len(key), 0)
 	if index >= 0 {
 		return dat.GetValueAt(index)
@@ -855,7 +854,7 @@ func (dat *DoubleArrayTrie) Transition(path string) int {
  * @param path
  * @return
  */
-func (dat *DoubleArrayTrie) Transition2(path []Character) int {
+func (dat *DoubleArrayTrie) Transition2(path []Char) int {
 	b := dat.base[0]
 	var p int
 
@@ -902,7 +901,7 @@ func (dat *DoubleArrayTrie) Transition3(path string, from int) int {
  * @param from
  * @return
  */
-func (dat *DoubleArrayTrie) Transition4(c Character, from int) int {
+func (dat *DoubleArrayTrie) Transition4(c Char, from int) int {
 	b := from
 	var p int
 
@@ -940,7 +939,7 @@ func (dat *DoubleArrayTrie) GetSearcher2(text string, offset int) Searcher {
 	return *NewSearcher(offset, String(text).ToCharArray())
 }
 
-func (dat *DoubleArrayTrie) GetSearcher3(text []Character, offset int) Searcher {
+func (dat *DoubleArrayTrie) GetSearcher3(text []Char, offset int) Searcher {
 	return *NewSearcher(offset, text)
 }
 
@@ -961,7 +960,7 @@ func (dat *DoubleArrayTrie) GetLongestSearcher(text string, offset int) LongestS
 	return dat.GetLongestSearcher2(String(text).ToCharArray(), offset)
 }
 
-func (dat *DoubleArrayTrie) GetLongestSearcher2(text []Character, offset int) LongestSearcher {
+func (dat *DoubleArrayTrie) GetLongestSearcher2(text []Char, offset int) LongestSearcher {
 	return *NewLongestSearcher(offset, text)
 }
 
@@ -985,7 +984,7 @@ func (dat *DoubleArrayTrie) ParseLongestText(text string, processor ahocorasick.
  * @param c
  * @return
  */
-func (dat *DoubleArrayTrie) Transition5(current int, c Character) int {
+func (dat *DoubleArrayTrie) Transition5(current int, c Char) int {
 	b := dat.base[current]
 	var p int
 

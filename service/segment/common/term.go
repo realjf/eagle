@@ -1,17 +1,17 @@
 package common
 
 import (
-	"eagle/service/corpus/tag"
+	. "eagle/service/corpus/tag"
 )
 
 type Term struct {
 	Word string // 词语
-	Nature tag.Nature // 词性
+	Nature Nature // 词性
 	Offset int // 在文本中的起始位置（需开启分词器的offset选项）
 
 }
 
-func NewTerm(word string, nature tag.Nature) *Term {
+func NewTerm(word string, nature Nature) *Term {
 	return &Term{
 		Word: word,
 		Nature: nature,

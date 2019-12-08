@@ -3,6 +3,7 @@ package viterbi
 import (
 	. "eagle/service/common"
 	"eagle/service/segment"
+	"eagle/service/segment/common"
 	"github.com/gogf/gf/container/glist"
 )
 
@@ -18,6 +19,9 @@ func NewViterbiSegment() *ViterbiSegment {
 
 // 切分句子
 func (s *ViterbiSegment) SegSentence(sentence []Char) glist.List {
+	wordNetAll := common.NewWordNetFromCharArray(sentence)
+
+
 
 	return *glist.New(true)
 }

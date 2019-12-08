@@ -31,7 +31,7 @@ const (
 
 
 	// 平滑参数
-	dSmoothingPara = 0.1
+	DSmoothingPara = 0.1
 	// 地址 ns
 	TAG_PLACE = "未##地"
 	// 句子的开始 begin
@@ -76,7 +76,7 @@ var (
 		"自治区","自治县","自治州"}
 
 	// Smoothing 平滑因子
-	dTemp = float64(1.0) / MAX_FREQUENCY + 0.00001
+	DTemp = float64(1.0) / MAX_FREQUENCY + 0.00001
 
 	// 日志组件
 )

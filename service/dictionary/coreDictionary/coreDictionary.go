@@ -23,8 +23,8 @@ func init() {
 
 // 使用DoubleArrayTrie实现的核心词典
 type CoreDictionary struct {
-	path string
-	trie *trie.DoubleArrayTrie
+	Path string
+	Trie *trie.DoubleArrayTrie
 	TotalFrequency int
 
 	NR_WORD_ID int
@@ -38,8 +38,8 @@ type CoreDictionary struct {
 
 func NewCoreDictionary() *CoreDictionary {
 	cd := &CoreDictionary{
-		trie: trie.NewDoubleArrayTrie(),
-		path: config.GConfig.CoreDictionaryPath,
+		Trie: trie.NewDoubleArrayTrie(),
+		Path: config.GConfig.CoreDictionaryPath,
 		TotalFrequency: totalFrequency,
 	}
 
@@ -55,15 +55,15 @@ func NewCoreDictionary() *CoreDictionary {
 }
 
 func (cd *CoreDictionary) Get(key string) dictionary.Attribute {
-	return cd.trie.Get(key).(dictionary.Attribute)
+	return cd.Trie.Get(key).(dictionary.Attribute)
 }
 
 func (cd *CoreDictionary) GetByWordID(wordID int) dictionary.Attribute {
-	return cd.trie.Get3(wordID).(dictionary.Attribute)
+	return cd.Trie.Get3(wordID).(dictionary.Attribute)
 }
 
 func (cd *CoreDictionary) GetWordID(a string) int {
-	return cd.trie.ExactMatchSearch(a)
+	return cd.Trie.ExactMatchSearch(a)
 }
 
 
