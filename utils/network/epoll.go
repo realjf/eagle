@@ -29,7 +29,7 @@ func MkEpoll() (*EPoll, error) {
 
 func (e *EPoll) Add(conn net.Conn) error {
 	// Extract file descriptor associated with the connection
-	fd := websocketFD(conn)
+	fd := getSocketFD(conn)
 	err := unix.EpollCtl(e.fd, syscall.EPOLL_CTL_ADD, fd, &unix.EpollEvent{Events: unix.POLLIN | unix.POLLHUP, Fd: int32(fd)})
 	if err != nil {
 		return err
@@ -44,7 +44,7 @@ func (e *EPoll) Add(conn net.Conn) error {
 }
 
 func (e *EPoll) Remove(conn net.Conn) error {
-	fd := websocketFD(conn)
+	fd := getSocketFD(conn)
 	err := unix.EpollCtl(e.fd, syscall.EPOLL_CTL_DEL, fd, nil)
 	if err != nil {
 		return err
@@ -74,14 +74,8 @@ func (e *EPoll) Wait() ([]net.Conn, error) {
 	return connections, nil
 }
 
-func websocketFD(conn net.Conn) int {
-	//tls := reflect.TypeOf(conn.UnderlyingConn()) == reflect.TypeOf(&tls.Conn{})
-	// Extract the file descriptor associated with the connection
-	//connVal := reflect.Indirect(reflect.ValueOf(conn)).FieldByName("conn").Elem()
+func getSocketFD(conn net.Conn) int {
 	tcpConn := reflect.Indirect(reflect.ValueOf(conn)).FieldByName("conn")
-	//if tls {
-	//	tcpConn = reflect.Indirect(tcpConn.Elem())
-	//}
 	fdVal := tcpConn.FieldByName("fd")
 	pfdVal := reflect.Indirect(fdVal).FieldByName("pfd")
 
