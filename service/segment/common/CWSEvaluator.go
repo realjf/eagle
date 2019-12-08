@@ -2,16 +2,13 @@ package common
 
 import (
 	"bufio"
+	"eagle/service/segment"
 	"fmt"
 	"github.com/gogf/gf/container/gset"
 	"github.com/gogf/gf/util/gconv"
 	"os"
 	"strings"
 )
-
-
-
-
 
 type CWSEvaluator struct {
 	A_size int
@@ -32,12 +29,14 @@ func NewCWSEvaluator2(dic gset.StrSet) *CWSEvaluator {
 }
 
 func NewCWSEvaluator(dictPath string) *CWSEvaluator {
-
+	cwse := NewCWSEvaluator2(*gset.NewStrSet(true))
 	if dictPath == "" {
 		return nil
 	}
 
+	// 加载
 
+	return cwse
 }
 
 // 获取PRF
@@ -134,7 +133,7 @@ func (c *CWSEvaluator) Evaluate(goldFile string, predFile string) Result {
 // outputPath 分词预测输出文件
 // goldFile   测试集segmented file
 // dictPath   训练集单词列表
-func (c *CWSEvaluator) Evaluate2(segment Segment, outputPath string, goldFile string, dictPath string) Result {
+func (c *CWSEvaluator) Evaluate2(segment segment.Segment, outputPath string, goldFile string, dictPath string) Result {
 	goldr, _ := os.Open(goldFile)
 	defer goldr.Close()
 	outw, _ := os.OpenFile(outputPath, os.O_RDWR, 600)
@@ -151,7 +150,7 @@ func (c *CWSEvaluator) Evaluate2(segment Segment, outputPath string, goldFile st
 // outputPath 分词预测输出文件
 // goldFile   测试集segmented file
 // dictPath   训练集单词列表
-func (c *CWSEvaluator) Evaluate3(segment Segment, testFile string, outputPath string, goldFile string, dictPath string) Result {
+func (c *CWSEvaluator) Evaluate3(segment segment.Segment, testFile string, outputPath string, goldFile string, dictPath string) Result {
 	return c.Evaluate2(segment, outputPath, goldFile, dictPath)
 }
 
