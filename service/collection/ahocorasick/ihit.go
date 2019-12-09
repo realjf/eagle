@@ -25,6 +25,14 @@ type Hit struct {
 	value interface{} // 模式串对应的值
 }
 
+func NewHit(begin int, end int, value interface{}) *Hit {
+	return &Hit{
+		begin:begin,
+		end:end,
+		value: value,
+	}
+}
+
 func (h *Hit) Hit(begin int, end int, value interface{}) {
 	h.begin = begin
 	h.end = end
