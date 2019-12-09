@@ -6,14 +6,6 @@ import (
 )
 
 type AhoCorasickDoubleArrayTrie struct {
-	check  []int   // 双数组之check
-	base   []int   // 双数组之base
-	fail   []int   // fail表
-	output [][]int // 输出表
-	v      []interface{}     // 保存value
-	l      []int   // 每个key的长度
-	size   int     // base和check 的大小
-
 	Builder
 }
 
@@ -22,9 +14,17 @@ func NewAhoCorasickDoubleArrayTrie() *AhoCorasickDoubleArrayTrie {
 }
 
 func NewAhoCorasickDoubleArrayTrie2(dictionary gmap.TreeMap) *AhoCorasickDoubleArrayTrie {
-	return build(dictionary)
+	dat := NewAhoCorasickDoubleArrayTrie()
+	dat.Build(dictionary)
+	return dat
 }
 
+/**
+ * 匹配母文本
+ *
+ * @param text 一些文本
+ * @return 一个pair列表
+ */
 func (a *AhoCorasickDoubleArrayTrie) ParseText(text string) []Hit {
 	var position int = 1
 	var currentState int = 0
@@ -84,8 +84,8 @@ func (a *AhoCorasickDoubleArrayTrie) TransitionWithRoot(nodePos int, c Char) int
 	return p
 }
 
-func build(map gmap.TreeMap) *AhoCorasickDoubleArrayTrie {
-	Builder{}
+func (a *AhoCorasickDoubleArrayTrie) Build(m gmap.TreeMap) {
+	a.Builder.Build(m)
 }
 
 

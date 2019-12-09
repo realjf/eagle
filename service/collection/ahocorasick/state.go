@@ -1,17 +1,12 @@
 package ahocorasick
 
 import (
-	"fmt"
 	. "eagle/service/common"
+	"fmt"
 	"github.com/gogf/gf/container/gmap"
 	"github.com/gogf/gf/container/gset"
-	"github.com/gogf/gf/container/gtree"
+	"github.com/gogf/gf/util/gutil"
 )
-
-type SuccessTree struct {
-	success gmap.TreeMap
-	list *gtree.AVLTree
-}
 
 // 一个状态有如下几个功能
 // success: 成功转移到另一个状态
@@ -31,6 +26,21 @@ type State struct {
 func NewState() *State {
 	return &State{
 		depth: 0,
+		failure: new(State),
+		emits: gset.NewIntSet(true),
+		success: gmap.NewTreeMap(gutil.ComparatorRune, true),
+		index: 0,
+	}
+}
+
+// 构造深度为depth的节点
+func NewState2(depth int) *State {
+	return &State{
+		depth:depth,
+		failure:NewState(),
+		emits: gset.NewIntSet(true),
+		success: gmap.NewTreeMap(gutil.ComparatorRune, true),
+		index: 0,
 	}
 }
 
@@ -64,6 +74,23 @@ func (s *State) GetLargestValueId() int {
 	return max
 }
 
+// 添加一些匹配到的模式串
+func (s *State) AddEmit2(emits gset.IntSet) {
+	emits.Iterator(func(v int) bool {
+		s.AddEmit(v)
+		return true
+	})
+}
+
+// 获取这个节点代表的模式串
+func (s *State) Emit() *gset.IntSet {
+	if s.emits == nil {
+		return nil
+	}else{
+		return s.emits
+	}
+}
+
 // 是否是终止状态
 func (s *State) IsAcceptable() bool {
 	return s.depth > 0 && s.emits != nil
@@ -84,12 +111,16 @@ func (s *State) setFailure(failState *State, fail []int) {
 // character 希望按此字符转移
 // ignoreRootState 是否忽略根节点，如果是根节点自己调用则应该是true，否则为false
 func (s *State) NextState(character Char, ignoreRootState bool) *State {
-	nextState := s.success.Get(character).(*State)
+	nextState := s.success.Get(character)
 	if !ignoreRootState && nextState == nil && s.depth == 0 {
 		nextState = s
 	}
 
-	return nextState
+	if ns, ok := nextState.(*State); ok {
+		return ns
+	}else{
+		return nil
+	}
 }
 
 // 按照character转移，根节点转移失败会返回自己（永远不会返回null）
@@ -105,7 +136,7 @@ func (s *State) NextStateIgnoreRootState(character Char) *State {
 func (s *State) AddState(character Char) *State {
 	nextState := s.NextStateIgnoreRootState(character)
 	if nextState == nil {
-		nextState = &State{depth:s.depth+1}
+		nextState = NewState2(s.depth+1)
 		s.success.Set(character, nextState)
 	}
 	return nextState
@@ -135,7 +166,7 @@ func (s *State) GetTransitions() []Char {
 func (s *State) ToString() string {
 
 	return fmt.Sprintf("State{depth=%d, ID=%d, emits=%v, success=%v, failureID=%d, failure=%v}",
-		s.depth, s.index, s.emits, s.success, s.failure.index, s.failure)
+		s.depth, s.index, s.emits, s.success.String(), s.failure.index, s.failure)
 }
 
 // 获取goto表
