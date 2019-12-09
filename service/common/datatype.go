@@ -42,6 +42,17 @@ func (s String) Substring(start int, end int) string {
 	return gstr.SubStr(string(s), start, length)
 }
 
+func (s String) StartsWith(prefix string) bool {
+	prefixs := String(prefix).ToCharArray()
+	value := s.ToCharArray()[0]
+	for _, pre := range prefixs {
+		if pre == value {
+			return true
+		}
+	}
+	return false
+}
+
 func (s String) Substr(start int, length int) string {
 	return gstr.SubStr(string(s), start, length)
 }
