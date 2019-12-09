@@ -47,6 +47,20 @@ func (wn *WordNet) Add(line int, vertex Vertex) {
 	wn.Size++
 }
 
+/**
+ * 全自动添加顶点
+ *
+ * @param vertexList
+ */
+func (wn *WordNet) AddAll(vertexList glist.List) {
+	var i int = 0
+	vertexList.Iterator(func(e *glist.Element) bool {
+		wn.Add(i, e.Value.(Vertex))
+		i += String(e.Value.(Vertex).RealWord).Length()
+		return true
+	})
+}
+
 // 添加顶点，由原子分词顶点添加
 func (wn *WordNet) AddSegment(line int, atomSegment glist.List) {
 	offset := 0
