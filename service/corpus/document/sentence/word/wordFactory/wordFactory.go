@@ -3,6 +3,7 @@ package wordFactory
 import (
 	. "eagle/service/common"
 	"eagle/service/corpus/document/sentence/word"
+	"eagle/service/corpus/document/sentence/word/compoundWord"
 )
 
 func Create(param string) word.IWord {
@@ -10,7 +11,7 @@ func Create(param string) word.IWord {
 		return nil
 	}
 	if String(param).StartsWith("[") && !String(param).StartsWith("[/") {
-		return
+		return compoundWord.Create(param)
 	}else{
 		return word.Create(param)
 	}

@@ -42,6 +42,10 @@ func (s String) Substring(start int, end int) string {
 	return gstr.SubStr(string(s), start, length)
 }
 
+func (s String) LastIndexOf(needle string, startOffset ...int) int {
+	return gstr.PosR(string(s), needle, startOffset...)
+}
+
 func (s String) StartsWith(prefix string) bool {
 	prefixs := String(prefix).ToCharArray()
 	value := s.ToCharArray()[0]
