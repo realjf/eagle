@@ -2,14 +2,19 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"eagle/utils"
 	"eagle/utils/network"
 	"flag"
+	"log"
 	"net"
 	"net/http"
 	_ "net/http/pprof"
+	"os"
+	"os/signal"
 	"runtime"
 	"syscall"
+	"time"
 )
 
 var (
@@ -19,7 +24,6 @@ var (
 )
 
 func init() {
-
 }
 
 func Parse() {
@@ -30,6 +34,9 @@ func Parse() {
 func main() {
 	Parse()
 	runtime.GOMAXPROCS(runtime.NumCPU())
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	var rLimit syscall.Rlimit
 	if err := syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit); err != nil {
@@ -57,22 +64,41 @@ func main() {
 		panic(err)
 	}
 
-	go Start()
+	go Start(ctx)
 
+	go handleConnection(netListener, ctx)
+
+	gracefulExit(cancel)
+	<-ctx.Done()
+}
+
+func handleConnection(netListener net.Listener, ctx context.Context) {
+	ctx2, cancel2 := context.WithCancel(ctx)
+	defer cancel2()
 	for {
-		conn, err := netListener.Accept()
-		if err != nil {
-			continue
-		}
+		select {
+		case <- ctx2.Done():
+			err := netListener.Close()
+			if err != nil {
+				log.Println("shutdown server error ", err)
+			}
+		default:
+			conn, err := netListener.Accept()
+			if err != nil {
+				continue
+			}
 
-		if err := epoller.Add(conn); err != nil {
-			utils.Logger.Printf("Failed to add connection %v", err)
-			conn.Close()
+			if err := epoller.Add(conn); err != nil {
+				utils.Logger.Printf("Failed to add connection %v", err)
+				conn.Close()
+			}
 		}
 	}
 }
 
-func Start() {
+func Start(ctx context.Context) {
+	ctx2, cancel2 := context.WithCancel(ctx)
+	defer cancel2()
 	for {
 		connections, err := epoller.Wait()
 		if err != nil {
@@ -80,20 +106,47 @@ func Start() {
 			continue
 		}
 
-		for _, conn := range connections {
-			if conn == nil {
-				break
-			}
-			reader := bufio.NewReader(conn)
-			if msg, err := reader.ReadString('\n'); err != nil {
+		select {
+		case <-ctx2.Done():
+			for _, conn := range connections {
 				if err := epoller.Remove(conn); err != nil {
 					utils.Logger.Printf("Failed to remove %v", err)
 				}
-			} else {
-				// process data
-				conn.Write([]byte(msg))
-				utils.Logger.Printf("%s", msg)
+				conn.Close()
+			}
+			utils.Logger.Printf("remove all connections")
+			return
+		default:
+			for _, conn := range connections {
+				if conn == nil {
+					break
+				}
+				reader := bufio.NewReader(conn)
+				if msg, err := reader.ReadString('\n'); err != nil {
+					if err := epoller.Remove(conn); err != nil {
+						utils.Logger.Printf("Failed to remove %v", err)
+					}
+				} else {
+					// process data
+					conn.Write([]byte(msg))
+					utils.Logger.Printf("%s", msg)
+				}
 			}
 		}
 	}
+}
+
+func gracefulExit(cancelFunc context.CancelFunc) {
+	now := time.Now()
+	ch := make(chan os.Signal)
+	signal.Notify(ch, os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGINT)
+	sig := <-ch
+
+	log.Println("got a signal ", sig)
+
+	cancelFunc()
+	uptime := time.Now().Sub(now).Seconds()
+	log.Println("shutdown server success.")
+
+	log.Println("---------------exited---------------", uptime, " seconds")
 }

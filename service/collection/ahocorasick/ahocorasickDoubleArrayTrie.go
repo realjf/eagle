@@ -45,7 +45,7 @@ func (a *AhoCorasickDoubleArrayTrie) StoreEmits(position int, currentState int, 
 	var hitArray []int = a.output[currentState]
 	if hitArray != nil {
 		for _, hit := range hitArray {
-			collectedEmits.PushBack(NewHit(position - a.l[hit], position, a.v[hit]))
+			collectedEmits.PushBack(NewHit(position-a.l[hit], position, a.v[hit]))
 		}
 	}
 }
@@ -60,7 +60,7 @@ func (a *AhoCorasickDoubleArrayTrie) ParseText2(text string, processor IHit) {
 		var hitArray []int = a.output[currentState]
 		if hitArray != nil {
 			for _, hit := range hitArray {
-				processor.Hit(position - a.l[hit], position, a.v[hit])
+				processor.Hit(position-a.l[hit], position, a.v[hit])
 			}
 		}
 		position++
@@ -76,7 +76,7 @@ func (a *AhoCorasickDoubleArrayTrie) ParseText3(text []Char, processor IHit) {
 		var hitArray []int = a.output[currentState]
 		if hitArray != nil {
 			for _, hit := range hitArray {
-				processor.Hit(position - a.l[hit], position, a.v[hit])
+				processor.Hit(position-a.l[hit], position, a.v[hit])
 			}
 		}
 		position++
@@ -98,7 +98,7 @@ func (a *AhoCorasickDoubleArrayTrie) Save(out io.DataOutputStream) {
 		var output []int = a.output[i]
 		if output == nil {
 			out.WriteInt(0)
-		}else{
+		} else {
 			out.WriteInt(len(output))
 			for _, o := range output {
 				out.WriteInt(o)
@@ -201,7 +201,7 @@ func (a *AhoCorasickDoubleArrayTrie) Get2(index int) interface{} {
 
 func (a *AhoCorasickDoubleArrayTrie) GetState(currentState int, character Char) int {
 	var newCurrentState int = a.TransitionWithRoot(currentState, character)
-	for ;newCurrentState == -1; {
+	for newCurrentState == -1 {
 		currentState = a.fail[currentState]
 		newCurrentState = a.TransitionWithRoot(currentState, character)
 	}
@@ -222,7 +222,7 @@ func (a *AhoCorasickDoubleArrayTrie) Transition(current int, c Char) int {
 	p = b + c.ToInt() + 1
 	if b == a.check[p] {
 		b = a.base[p]
-	}else{
+	} else {
 		return -1
 	}
 	p = b
@@ -291,7 +291,7 @@ func (a *AhoCorasickDoubleArrayTrie) ExactMatchSearch2(key string, pos int, leng
 		p = b + keyChars[i].ToInt() + 1
 		if b == a.check[p] {
 			b = a.base[p]
-		}else{
+		} else {
 			return result
 		}
 	}
@@ -299,7 +299,7 @@ func (a *AhoCorasickDoubleArrayTrie) ExactMatchSearch2(key string, pos int, leng
 	p = b
 	var n int = a.base[p]
 	if b == a.check[p] && n < 0 {
-		result = -n -1
+		result = -n - 1
 	}
 	return result
 }
@@ -322,7 +322,7 @@ func (a *AhoCorasickDoubleArrayTrie) ExactMatchSearch3(keyChars []Char, pos int,
 		p = b + keyChars[i].ToInt() + 1
 		if b == a.check[p] {
 			b = a.base[p]
-		}else{
+		} else {
 			return result
 		}
 	}
@@ -330,7 +330,7 @@ func (a *AhoCorasickDoubleArrayTrie) ExactMatchSearch3(keyChars []Char, pos int,
 	p = b
 	var n int = a.base[p]
 	if b == a.check[p] && n < 0 {
-		result = -n -1
+		result = -n - 1
 	}
 	return result
 }
@@ -343,8 +343,7 @@ func (a *AhoCorasickDoubleArrayTrie) ExactMatchSearch3(keyChars []Char, pos int,
 func (a *AhoCorasickDoubleArrayTrie) Size() int {
 	if a.v == nil {
 		return 0
-	}else{
+	} else {
 		return len(a.v)
 	}
 }
-

@@ -27,8 +27,8 @@ type Hit struct {
 
 func NewHit(begin int, end int, value interface{}) *Hit {
 	return &Hit{
-		begin:begin,
-		end:end,
+		begin: begin,
+		end:   end,
 		value: value,
 	}
 }

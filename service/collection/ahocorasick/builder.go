@@ -11,18 +11,18 @@ import (
 )
 
 type Builder struct {
-	rootState *State // 根节点，仅仅用于构建过程
-	used []bool // 是否占用，仅仅用于构建
-	allocSize int // 已分配在内存中的大小
-	progress int // 一个控制增长速度的变量
-	nextCheckPos int // 下一个插入的位置将从此开始搜索
-	keySize int // 键值对的大小
+	rootState    *State // 根节点，仅仅用于构建过程
+	used         []bool // 是否占用，仅仅用于构建
+	allocSize    int    // 已分配在内存中的大小
+	progress     int    // 一个控制增长速度的变量
+	nextCheckPos int    // 下一个插入的位置将从此开始搜索
+	keySize      int    // 键值对的大小
 
-	check  []int   // 双数组之check
-	base   []int   // 双数组之base
-	v      []interface{}     // 保存value
-	l      []int   // 每个key的长度
-	size   int     // base和check 的大小
+	check []int         // 双数组之check
+	base  []int         // 双数组之base
+	v     []interface{} // 保存value
+	l     []int         // 每个key的长度
+	size  int           // base和check 的大小
 
 	fail   []int   // fail表
 	output [][]int // 输出表
@@ -164,63 +164,63 @@ func (b *Builder) resize(newSize int) int {
  */
 func (b *Builder) insert(siblings garray.Array) int {
 	begin := 0
-	var pos int = gconv.Int(math.Max(float64(siblings.Get(0).(EntrySet).GetKey().(int) + 1), float64(b.nextCheckPos)) - 1)
+	var pos int = gconv.Int(math.Max(float64(siblings.Get(0).(EntrySet).GetKey().(int)+1), float64(b.nextCheckPos)) - 1)
 	nonzero_num := 0
 	first := 0
 
 	if b.allocSize <= pos {
-		b.resize(pos+1)
+		b.resize(pos + 1)
 	}
 
-	outer:
-		// 此循环体的目标是找出满足base[begin + a1...an]  == 0的n个空闲空间,a1...an是siblings中的n个节点
-		for {
-			pos++
-			if b.allocSize <= pos {
-				b.resize(pos+1)
-			}
-
-			if b.check[pos] != 0 {
-				nonzero_num++
-				continue
-			}else if first == 0 {
-				b.nextCheckPos = pos
-				first = 1
-			}
-
-			// 当前位置离第一个兄弟节点的距离
-			begin = pos - siblings.Get(0).(EntrySet).GetKey().(int)
-			if b.allocSize <= (begin + siblings.Get(siblings.Len() - 1).(EntrySet).GetKey().(int)) {
-				var l float64
-				if 1.05 > 1.0 * float64(b.keySize) / float64(b.progress + 1) {
-					l = 1.05
-				}else{
-					l = 1.0 * float64(b.keySize) / float64(b.progress + 1)
-				}
-				b.resize(int(float64(b.allocSize) * l))
-			}
-
-			if b.used[begin] {
-				continue
-			}
-
-			for i := 1; i < siblings.Len(); i++ {
-				if b.check[begin + siblings.Get(i).(EntrySet).GetKey().(int)] != 0 {
-					continue outer
-				}
-			}
-			break
+outer:
+	// 此循环体的目标是找出满足base[begin + a1...an]  == 0的n个空闲空间,a1...an是siblings中的n个节点
+	for {
+		pos++
+		if b.allocSize <= pos {
+			b.resize(pos + 1)
 		}
 
-	if 1.0 * float64(nonzero_num) / float64(pos - b.nextCheckPos + 1) >= 0.95 {
+		if b.check[pos] != 0 {
+			nonzero_num++
+			continue
+		} else if first == 0 {
+			b.nextCheckPos = pos
+			first = 1
+		}
+
+		// 当前位置离第一个兄弟节点的距离
+		begin = pos - siblings.Get(0).(EntrySet).GetKey().(int)
+		if b.allocSize <= (begin + siblings.Get(siblings.Len()-1).(EntrySet).GetKey().(int)) {
+			var l float64
+			if 1.05 > 1.0*float64(b.keySize)/float64(b.progress+1) {
+				l = 1.05
+			} else {
+				l = 1.0 * float64(b.keySize) / float64(b.progress+1)
+			}
+			b.resize(int(float64(b.allocSize) * l))
+		}
+
+		if b.used[begin] {
+			continue
+		}
+
+		for i := 1; i < siblings.Len(); i++ {
+			if b.check[begin+siblings.Get(i).(EntrySet).GetKey().(int)] != 0 {
+				continue outer
+			}
+		}
+		break
+	}
+
+	if 1.0*float64(nonzero_num)/float64(pos-b.nextCheckPos+1) >= 0.95 {
 		b.nextCheckPos = pos
 	}
 	b.used[begin] = true
 
-	if b.size > begin + siblings.Get(siblings.Len() - 1).(EntrySet).GetKey().(int) + 1 {
+	if b.size > begin+siblings.Get(siblings.Len()-1).(EntrySet).GetKey().(int)+1 {
 		b.size = b.size
-	}else{
-		b.size = begin + siblings.Get(siblings.Len() - 1).(EntrySet).GetKey().(int) + 1
+	} else {
+		b.size = begin + siblings.Get(siblings.Len()-1).(EntrySet).GetKey().(int) + 1
 	}
 
 	for _, entry := range siblings.Slice() {
@@ -231,12 +231,12 @@ func (b *Builder) insert(siblings garray.Array) int {
 	for _, entry := range siblings.Slice() {
 		entrySet := entry.(EntrySet)
 		new_siblings := garray.New(true)
-		if b.fetch(entrySet.GetValue().(State), new_siblings) == 0 {// 一个词的终止且不为其他词的前缀，其实就是叶子节点
-			b.base[begin + entrySet.GetKey().(int)] = (-entrySet.GetValue().(State).GetLargestValueId() - 1)
+		if b.fetch(entrySet.GetValue().(State), new_siblings) == 0 { // 一个词的终止且不为其他词的前缀，其实就是叶子节点
+			b.base[begin+entrySet.GetKey().(int)] = (-entrySet.GetValue().(State).GetLargestValueId() - 1)
 			b.progress++
-		}else{
+		} else {
 			h := b.insert(*new_siblings)
-			b.base[begin + entrySet.GetKey().(int)] = h
+			b.base[begin+entrySet.GetKey().(int)] = h
 		}
 		entrySet.GetValue().(State).SetIndex(begin + entrySet.GetKey().(int))
 	}
@@ -248,11 +248,11 @@ func (b *Builder) insert(siblings garray.Array) int {
  * 释放空闲的内存
  */
 func (b *Builder) loseWeight() {
-	var nbase []int = make([]int, 0, b.size + 65535)
+	var nbase []int = make([]int, 0, b.size+65535)
 	copy(nbase, b.base)
 	b.base = nbase
 
-	var nCheck []int = make([]int, 0, b.size + 65535)
+	var nCheck []int = make([]int, 0, b.size+65535)
 	copy(nCheck, b.check)
 	b.check = nCheck
 }
@@ -261,15 +261,11 @@ func (b *Builder) fetch(parent State, siblings *garray.Array) int {
 	if parent.IsAcceptable() {
 		fakeNode := NewState2(parent.GetDepth() + 1)
 		fakeNode.AddEmit(parent.GetLargestValueId())
-		siblings.PushLeft(EntrySet{0:fakeNode})
+		siblings.PushLeft(EntrySet{0: fakeNode})
 	}
 	entrySets := parent.GetSuccess().Map()
 	for _, entry := range utils.MapToMapEntrySet(entrySets) {
-		siblings.PushLeft(EntrySet{entry.GetKey().(int)+1:entry.GetValue()})
+		siblings.PushLeft(EntrySet{entry.GetKey().(int) + 1: entry.GetValue()})
 	}
 	return siblings.Len()
 }
-
-
-
-

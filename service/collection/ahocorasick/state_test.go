@@ -23,4 +23,3 @@ func TestNewState(t *testing.T) {
 	t.Log(state.GetLargestValueId())
 	t.Fatal(state)
 }
-

@@ -229,7 +229,7 @@ func (s *Segment) CombineByCustomDictionary2(vertexList glist.List, dat *trie.Do
 			if &wordNet[i] == nil {
 				continue
 			}
-			var state bintrie.BaseNode = customDictionary.GCustomDictionary.Trie.T
+			var state bintrie.BaseNode = customDictionary.GCustomDictionary.Trie.
 			if state != nil {
 				var to int = i + 1
 				var end int = to
