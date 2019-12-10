@@ -141,12 +141,15 @@ func gracefulExit(cancelFunc context.CancelFunc) {
 	ch := make(chan os.Signal)
 	signal.Notify(ch, os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGINT)
 	sig := <-ch
-
 	log.Println("got a signal ", sig)
+	log.Println("--------------- start cleaning ---------------")
 
 	cancelFunc()
-	uptime := time.Now().Sub(now).Seconds()
-	log.Println("shutdown server success.")
+	uptime := time.Since(now)
+	log.Println("          shutdown server success.            ")
 
-	log.Println("---------------exited---------------", uptime, " seconds")
+
+
+	log.Println("           uptime: ", uptime, "               ")
+	log.Println("------------------ exited --------------------")
 }
