@@ -40,7 +40,7 @@ func TestPriorityQueue(t *testing.T) {
 func TestUnsortedInsert(t *testing.T) {
 	c := 100
 	pq := NewPriorityQueue(c)
-	ints := make([]int, 0, c)
+	ints := make([]int, c)
 
 	for i := 0; i < c; i++ {
 		v := rand.Int()

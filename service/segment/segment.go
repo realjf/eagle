@@ -90,11 +90,11 @@ func (s *Segment) Seg2(text string) glist.List {
 
 	if s.Config.ThreadNumber > 1 && len(charArray) > 10000 {
 		sentenceList := sentencesUtil.ToSentenceList3(charArray)
-		sentenceArray := make([]string, 0, sentenceList.Size())
+		sentenceArray := make([]string, sentenceList.Size())
 
-		termListArray := make([]*glist.List, 0, len(sentenceArray))
+		termListArray := make([]*glist.List, len(sentenceArray))
 		per := len(sentenceArray) / s.Config.ThreadNumber
-		threadArray := make([]*WorkThread, 0, s.Config.ThreadNumber)
+		threadArray := make([]*WorkThread, s.Config.ThreadNumber)
 		for i :=0; i < s.Config.ThreadNumber -1; i++ {
 			from := i * per
 			threadArray[i] = NewWorkThread(s, sentenceArray, termListArray, from, from + per)
@@ -196,7 +196,7 @@ func (s *Segment) CombineByCustomDictionary(vertexList glist.List) glist.List {
 }
 
 func (s *Segment) CombineByCustomDictionary2(vertexList glist.List, dat *trie.DoubleArrayTrie) glist.List {
-	wordNet := make([]Vertex, 0, vertexList.Size())
+	wordNet := make([]Vertex, vertexList.Size())
 	// DAT合并
 	var length int = len(wordNet) - 1 // 跳过首尾
 	for i := 1; i < length; i++ {

@@ -289,7 +289,7 @@ func ExceptionToString(err error) string {
 
 // 转换long型为char数组
 func Int64ToChar(x int64) []Char {
-	c := make([]Char, 0, 4)
+	c := make([]Char, 4, 4)
 	c[0] = Char(x >> 48)
 	c[0] = Char(x >> 32)
 	c[0] = Char(x >> 16)

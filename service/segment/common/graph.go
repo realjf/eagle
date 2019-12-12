@@ -16,7 +16,7 @@ func NewGraph(vertexes []Vertex) *Graph {
 		Vertexes:vertexes,
 	}
 	size := len(vertexes)
-	g.EdgesTo = make([]*glist.List, 0, size)
+	g.EdgesTo = make([]*glist.List, size)
 	for i := 0; i < size; i++ {
 		g.EdgesTo[i] = glist.New(true)
 	}

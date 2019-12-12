@@ -83,8 +83,8 @@ func NewDoubleArrayTrie2(buildFrom gmap.TreeMap) *DoubleArrayTrie {
 
 // 拓展数组
 func (dat *DoubleArrayTrie) resize(newSize int) int {
-	base2 := make([]int, 0, newSize)
-	check2 := make([]int, 0, newSize)
+	base2 := make([]int, newSize)
+	check2 := make([]int, newSize)
 	if dat.allocSize > 0 {
 		copy(base2, dat.base)
 		copy(check2, dat.check)
@@ -355,8 +355,8 @@ func (dat *DoubleArrayTrie) Open(fileName string) {
 		panic("get file info error: " + err.Error())
 	}
 	dat.size = gconv.Int(fileInfo.Size()) / dat.UNIT_SIZE
-	dat.check = make([]int, 0, dat.size)
-	dat.base = make([]int, 0, dat.size)
+	dat.check = make([]int, dat.size)
+	dat.base = make([]int, dat.size)
 
 	var buf bytes.Buffer
 	_, err = buf.ReadFrom(file)
@@ -471,8 +471,8 @@ func (dat *DoubleArrayTrie) Load3(byteArray ByteArrayStream.ByteArrayStream, val
 	}
 
 	dat.size = byteArray.NextInt()
-	dat.base = make([]int, 0, dat.size + 65535)
-	dat.check = make([]int, 0, dat.size + 65535)
+	dat.base = make([]int, dat.size + 65535)
+	dat.check = make([]int, dat.size + 65535)
 
 	for i := 0; i < dat.size; i++ {
 		dat.base[i] = byteArray.NextInt()
@@ -496,8 +496,8 @@ func (dat *DoubleArrayTrie) Load4(bytes []byte, offset int, value []interface{})
 
 	dat.size = byteUtility.BytesHighFirstToInt(bytes, offset)
 	offset += 4
-	dat.base = make([]int, 0, dat.size + 65535)
-	dat.check = make([]int, 0, dat.size + 65535)
+	dat.base = make([]int, dat.size + 65535)
+	dat.check = make([]int, dat.size + 65535)
 
 	for i := 0; i < dat.size; i++ {
 		dat.base[i] = byteUtility.BytesHighFirstToInt(bytes, offset)
@@ -531,8 +531,8 @@ func (dat *DoubleArrayTrie) loadBaseAndCheck(path string) bool {
 		}
 	}
 	dat.size = in.ReadInt()
-	dat.base = make([]int, 0, dat.size + 65535)
-	dat.check = make([]int, 0, dat.size + 65535)
+	dat.base = make([]int, dat.size + 65535)
+	dat.check = make([]int, dat.size + 65535)
 	for i := 0; i < dat.size; i++ {
 		dat.base[i] = in.ReadInt()
 		dat.check[i] = in.ReadInt()
@@ -832,7 +832,7 @@ func (dat *DoubleArrayTrie) Get2(key []Char) interface{} {
 func (dat *DoubleArrayTrie) GetValueArray(a []interface{}) []interface{} {
 	size := len(dat.v)
 	if len(a) < size {
-		a = make([]interface{}, 0, size)
+		a = make([]interface{}, size)
 	}
 	copy(a, dat.v)
 	return a
@@ -1029,11 +1029,11 @@ func (dat *DoubleArrayTrie) Get3(index int) interface{} {
  * 释放空闲的内存
  */
 func (dat *DoubleArrayTrie) shrink() {
-	nbase := make([]int, 0, dat.size+65535)
+	nbase := make([]int, dat.size+65535)
 	copy(nbase, dat.base)
 	dat.base = nbase
 
-	ncheck := make([]int, 0, dat.size+65535)
+	ncheck := make([]int, dat.size+65535)
 	copy(ncheck, dat.check)
 	dat.check = ncheck
 }

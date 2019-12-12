@@ -18,8 +18,8 @@ type Attribute struct {
 
 func NewAttribute(size int) *Attribute {
 	return &Attribute{
-		Nature: make([]Nature, 0, size),
-		Frequency: make([]int, 0, size),
+		Nature: make([]Nature, size),
+		Frequency: make([]int, size),
 	}
 }
 

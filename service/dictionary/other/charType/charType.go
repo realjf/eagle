@@ -50,7 +50,7 @@ func NewCharType() *CharType {
 		CT_OTHER:TextUtility.CT_OTHER,
 	}
 
-	charType.Type = make([]Char, 0, 65536)
+	charType.Type = make([]Char, 65536)
 	utils.Logger.Info("字符类型对应表开始加载 " + config.GConfig.CharTypePath)
 	start := time.Now().UnixNano()
 	byteArray := ByteArray.CreateByteArray(config.GConfig.CharTypePath)
@@ -85,7 +85,7 @@ func (ct *CharType) Generate() (*ByteArray.ByteArray, error) {
 	for i := 0; i <= Character_MAX_VALUE; i++ {
 		t := TextUtility.CharType(Char(i))
 		if t != preType {
-			array := make([]int, 0, 3)
+			array := make([]int, 3)
 			array[0] = preChar
 			array[1] = i - 1
 			array[2] = preType
@@ -95,7 +95,7 @@ func (ct *CharType) Generate() (*ByteArray.ByteArray, error) {
 		preType = t
 	}
 	{
-		array := make([]int, 0, 3)
+		array := make([]int, 3)
 		array[0] = preChar
 		array[1] = Character_MAX_VALUE
 		array[2] = preType

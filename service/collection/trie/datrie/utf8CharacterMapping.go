@@ -26,7 +26,7 @@ func (u *Utf8CharacterMapping) ZeroId() int {
 
 func (u *Utf8CharacterMapping) ToIdList(key string) []int {
 	bytes
-	res := make([]int, 0, )
+	res := make([]int, )
 	for i := 0; i < len(res); i++ {
 		res[i] = bytes[i] & 0xFF
 	}
@@ -84,7 +84,7 @@ func (u *Utf8CharacterMapping) ToIdList2(codePoint int) []int {
 }
 
 func (u *Utf8CharacterMapping) ToString(ids []int) string {
-	var bytes []byte = make([]byte, 0, len(ids))
+	var bytes []byte = make([]byte, len(ids))
 	for i := 0; i < len(ids); i++ {
 		bytes[i] = byte(ids[i])
 	}

@@ -39,12 +39,12 @@ func (n *NShortPath) initNShortPath(inGraph Graph, nValueKind int) {
 
 	n.vertexCount = len(inGraph.Vertexes)
 
-	n.fromArray = make([][]CQueue, 0, n.vertexCount-1)
-	n.weightArray = make([][]float64, 0, n.vertexCount-1)
+	n.fromArray = make([][]CQueue, n.vertexCount-1)
+	n.weightArray = make([][]float64, n.vertexCount-1)
 
 	for i := 0; i < n.vertexCount - 1; i++ {
-		n.fromArray[i] = make([]CQueue, 0, nValueKind)
-		n.weightArray[i] = make([]float64, 0, nValueKind)
+		n.fromArray[i] = make([]CQueue, nValueKind)
+		n.weightArray[i] = make([]float64, nValueKind)
 
 		for j := 0; j < nValueKind; j++ {
 			n.fromArray[i][j] = *NewCQueue()
@@ -157,11 +157,11 @@ func (n *NShortPath) GetPaths(index int) glist.List {
 		}
 
 		// -------------- 输出路径 --------------
-		nArray := make([]PathNode, 0, stack.Len())
+		nArray := make([]PathNode, stack.Len())
 		for i:=0; i<stack.Len(); i++ {
 			nArray[i] = stack.Get(stack.Len()- i -1).(PathNode)
 		}
-		aPath = make([]int, 0, len(nArray))
+		aPath = make([]int, len(nArray))
 
 		for i :=0; i < len(aPath); i++ {
 			aPath[i] = nArray[i].From

@@ -73,7 +73,7 @@ func (ba *ByteArray) HasMore() bool {
 }
 
 func (ba *ByteArray) NextString() string {
-	var buf []Char = make([]Char, 0, ba.NextInt())
+	var buf []Char = make([]Char, ba.NextInt())
 	for i := 0; i < len(buf); i++ {
 		buf[i] = ba.NextChar()
 	}
@@ -96,8 +96,8 @@ func (ba *ByteArray) NextUnsignedShort() int {
 // 读取一个UTF字符串
 func (ba *ByteArray) NextUTF() string {
 	var utflen int = ba.NextUnsignedShort()
-	var bytearr []byte = make([]byte, 0, utflen)
-	var chararr []Char = make([]Char, 0, utflen)
+	var bytearr []byte = make([]byte, utflen)
+	var chararr []Char = make([]Char, utflen)
 
 	var c, char2, char3 int
 	count := 0
@@ -174,3 +174,8 @@ func (ba *ByteArray) GetLength() int {
 func (ba *ByteArray) Close() {
 	ba.Bytes = nil
 }
+
+
+
+
+

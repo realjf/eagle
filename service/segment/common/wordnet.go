@@ -25,7 +25,7 @@ func NewWordNet(sentence String) *WordNet {
 func NewWordNetFromCharArray(charArray []Char) *WordNet {
 	wn := &WordNet{}
 	wn.CharArray = charArray
-	wn.vertexes = make([]*glist.List, 0, len(wn.CharArray) + 2)
+	wn.vertexes = make([]*glist.List, len(wn.CharArray) + 2)
 	for i := 0; i< len(wn.vertexes); i++ {
 		wn.vertexes[i] = glist.New(true)
 	}

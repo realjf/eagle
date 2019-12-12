@@ -30,7 +30,7 @@ type Builder struct {
 
 func (b *Builder) Build(ma gmap.TreeMap) {
 	b.v = ma.Values()
-	b.l = make([]int, 0, len(b.v))
+	b.l = make([]int, len(b.v))
 	keySet := ma.Keys()
 	// 构建二分trie树
 	b.addAllKeyword(keySet)
@@ -70,9 +70,9 @@ func (b *Builder) addAllKeyword(keywordSet []interface{}) {
  * 建立failure表
  */
 func (b *Builder) constructFailureStates() {
-	b.fail = make([]int, 0, b.size+1)
+	b.fail = make([]int, b.size+1)
 	b.fail[1] = b.base[0]
-	b.output = make([][]int, 0, b.size+1)
+	b.output = make([][]int, b.size+1)
 	queue := gqueue.New()
 
 	// 第一步，将深度为1的节点的failure设为根节点
@@ -109,7 +109,7 @@ func (b *Builder) constructOutput(target State) {
 	if emit == nil || emit.Size() == 0 {
 		return
 	}
-	output := make([]int, 0, emit.Size())
+	output := make([]int, emit.Size())
 	i := 0
 	emit.Iterator(func(v int) bool {
 		output[i] = v
@@ -140,9 +140,9 @@ func (b *Builder) buildDoubleArrayTrie(keySet []interface{}) {
  * @return
  */
 func (b *Builder) resize(newSize int) int {
-	base2 := make([]int, 0, newSize)
-	check2 := make([]int, 0, newSize)
-	used2 := make([]bool, 0, newSize)
+	base2 := make([]int, newSize)
+	check2 := make([]int, newSize)
+	used2 := make([]bool, newSize)
 	if b.allocSize > 0 {
 		copy(base2, b.base)
 		copy(check2, b.check)
@@ -248,11 +248,11 @@ outer:
  * 释放空闲的内存
  */
 func (b *Builder) loseWeight() {
-	var nbase []int = make([]int, 0, b.size+65535)
+	var nbase []int = make([]int, b.size+65535)
 	copy(nbase, b.base)
 	b.base = nbase
 
-	var nCheck []int = make([]int, 0, b.size+65535)
+	var nCheck []int = make([]int, b.size+65535)
 	copy(nCheck, b.check)
 	b.check = nCheck
 }

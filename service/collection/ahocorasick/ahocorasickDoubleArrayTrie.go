@@ -131,10 +131,10 @@ func (a *AhoCorasickDoubleArrayTrie) Load2(byteArray ByteArray.ByteArray, value 
 		return false
 	}
 	a.size = byteArray.NextInt()
-	a.base = make([]int, 0, a.size+65535)
-	a.check = make([]int, 0, a.size+65535)
-	a.fail = make([]int, 0, a.size+65535)
-	a.output = make([][]int, 0, a.size+65535)
+	a.base = make([]int, a.size+65535)
+	a.check = make([]int, a.size+65535)
+	a.fail = make([]int, a.size+65535)
+	a.output = make([][]int, a.size+65535)
 	var length int
 	for i := 0; i < a.size; i++ {
 		a.base[i] = byteArray.NextInt()
@@ -144,13 +144,13 @@ func (a *AhoCorasickDoubleArrayTrie) Load2(byteArray ByteArray.ByteArray, value 
 		if length == 0 {
 			continue
 		}
-		a.output[i] = make([]int, 0, length)
+		a.output[i] = make([]int, length)
 		for j := 0; j < len(a.output[i]); j++ {
 			a.output[i][j] = byteArray.NextInt()
 		}
 	}
 	length = byteArray.NextInt()
-	a.l = make([]int, 0, length)
+	a.l = make([]int, length)
 	for i := 0; i < len(a.l); i++ {
 		a.l[i] = byteArray.NextInt()
 	}
