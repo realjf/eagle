@@ -2,7 +2,7 @@
 
 ADDRESS=$1
 if [[ ${ADDRESS} -eq "" ]]; then
-    ADDRESS=127.0.0.1:8888
+    ADDRESS=127.0.0.1:6060
 fi
 
 # 用 -alloc_space 分析内存的临时分配情况
