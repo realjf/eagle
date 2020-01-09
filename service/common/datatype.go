@@ -23,6 +23,18 @@ func NewString() String {
 	return String("")
 }
 
+func NewStringFromChar(arr []Char) String {
+	if len(arr) <= 0 {
+		return NewString()
+	}else{
+		s := NewString()
+		for _, ch := range arr {
+			s.Append(ch.ToString())
+		}
+		return s
+	}
+}
+
 // 转化为utf-8字符数组
 func (s String) ToCharArray() []Char {
 	str := strings.Split(string(s), "")

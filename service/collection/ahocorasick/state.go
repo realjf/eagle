@@ -28,7 +28,7 @@ func NewState() *State {
 		depth:   0,
 		failure: new(State),
 		emits:   gset.NewIntSet(true),
-		success: gmap.NewTreeMap(gutil.ComparatorRune, true),
+		success: gmap.NewTreeMap(gutil.ComparatorString, true),
 		index:   0,
 	}
 }
@@ -39,7 +39,7 @@ func NewState2(depth int) *State {
 		depth:   depth,
 		failure: NewState(),
 		emits:   gset.NewIntSet(true),
-		success: gmap.NewTreeMap(gutil.ComparatorRune, true),
+		success: gmap.NewTreeMap(gutil.ComparatorString, true),
 		index:   0,
 	}
 }

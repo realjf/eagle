@@ -77,7 +77,8 @@ func (ba *ByteArray) NextString() string {
 	for i := 0; i < len(buf); i++ {
 		buf[i] = ba.NextChar()
 	}
-	return string(buf)
+	s := NewStringFromChar(buf)
+	return s.ToString()
 }
 
 func (ba *ByteArray) NextFloat() float32 {
@@ -159,7 +160,8 @@ func (ba *ByteArray) NextUTF() string {
 			utils.Logger.Info("malformed input around byte ", count)
 		}
 	}
-	return string(chararr[0:chararr_count])
+	s := NewStringFromChar(chararr[0:chararr_count])
+	return s.ToString()
 }
 
 
