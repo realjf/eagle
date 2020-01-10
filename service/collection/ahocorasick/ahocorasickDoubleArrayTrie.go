@@ -13,7 +13,18 @@ type AhoCorasickDoubleArrayTrie struct {
 }
 
 func NewAhoCorasickDoubleArrayTrie() *AhoCorasickDoubleArrayTrie {
-	return &AhoCorasickDoubleArrayTrie{}
+	return &AhoCorasickDoubleArrayTrie{
+		Builder{
+			used: []bool{},
+			check: []int{},
+			base: []int{},
+			v: []interface{}{},
+			l: []int{},
+			size: 0,
+			fail: []int{},
+			output: [][]int{},
+		},
+	}
 }
 
 func NewAhoCorasickDoubleArrayTrie2(dictionary gmap.TreeMap) *AhoCorasickDoubleArrayTrie {

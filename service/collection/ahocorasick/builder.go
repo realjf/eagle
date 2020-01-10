@@ -164,7 +164,8 @@ func (b *Builder) resize(newSize int) int {
  */
 func (b *Builder) insert(siblings garray.Array) int {
 	begin := 0
-	var pos int = gconv.Int(math.Max(float64(siblings.Get(0).(EntrySet).GetKey().(int)+1), float64(b.nextCheckPos)) - 1)
+	ss := siblings.Get(0).(EntrySet)
+	var pos int = gconv.Int(math.Max(float64(ss.GetKey().(int)+1), float64(b.nextCheckPos)) - 1)
 	nonzero_num := 0
 	first := 0
 
@@ -189,8 +190,10 @@ outer:
 		}
 
 		// 当前位置离第一个兄弟节点的距离
-		begin = pos - siblings.Get(0).(EntrySet).GetKey().(int)
-		if b.allocSize <= (begin + siblings.Get(siblings.Len()-1).(EntrySet).GetKey().(int)) {
+		ss := siblings.Get(0).(EntrySet)
+		begin = pos - ss.GetKey().(int)
+		bb := siblings.Get(siblings.Len()-1).(EntrySet)
+		if b.allocSize <= (begin + bb.GetKey().(int)) {
 			var l float64
 			if 1.05 > 1.0*float64(b.keySize)/float64(b.progress+1) {
 				l = 1.05
@@ -205,7 +208,8 @@ outer:
 		}
 
 		for i := 1; i < siblings.Len(); i++ {
-			if b.check[begin+siblings.Get(i).(EntrySet).GetKey().(int)] != 0 {
+			sb := siblings.Get(i).(EntrySet)
+			if b.check[begin+sb.GetKey().(int)] != 0 {
 				continue outer
 			}
 		}
@@ -217,10 +221,12 @@ outer:
 	}
 	b.used[begin] = true
 
-	if b.size > begin+siblings.Get(siblings.Len()-1).(EntrySet).GetKey().(int)+1 {
+	sb := siblings.Get(siblings.Len()-1).(EntrySet)
+	if b.size > begin+sb.GetKey().(int)+1 {
 		b.size = b.size
 	} else {
-		b.size = begin + siblings.Get(siblings.Len()-1).(EntrySet).GetKey().(int) + 1
+		sc := siblings.Get(siblings.Len()-1).(EntrySet)
+		b.size = begin + sc.GetKey().(int) + 1
 	}
 
 	for _, entry := range siblings.Slice() {
@@ -232,13 +238,15 @@ outer:
 		entrySet := entry.(EntrySet)
 		new_siblings := garray.New(true)
 		if b.fetch(entrySet.GetValue().(State), new_siblings) == 0 { // 一个词的终止且不为其他词的前缀，其实就是叶子节点
-			b.base[begin+entrySet.GetKey().(int)] = (-entrySet.GetValue().(State).GetLargestValueId() - 1)
+			en := entrySet.GetValue().(State)
+			b.base[begin+entrySet.GetKey().(int)] = (-en.GetLargestValueId() - 1)
 			b.progress++
 		} else {
 			h := b.insert(*new_siblings)
 			b.base[begin+entrySet.GetKey().(int)] = h
 		}
-		entrySet.GetValue().(State).SetIndex(begin + entrySet.GetKey().(int))
+		en := entrySet.GetValue().(State)
+		en.SetIndex(begin + entrySet.GetKey().(int))
 	}
 
 	return begin
@@ -257,13 +265,15 @@ func (b *Builder) loseWeight() {
 	b.check = nCheck
 }
 
-func (b *Builder) fetch(parent State, siblings *garray.Array) int {
+func (b *Builder) fetch(pp State, siblings *garray.Array) int {
+	var parent *State = &pp
 	if parent.IsAcceptable() {
 		fakeNode := NewState2(parent.GetDepth() + 1)
 		fakeNode.AddEmit(parent.GetLargestValueId())
 		siblings.PushLeft(EntrySet{0: fakeNode})
 	}
-	entrySets := parent.GetSuccess().Map()
+	sets := parent.GetSuccess()
+	entrySets := sets.Map()
 	for _, entry := range utils.MapToMapEntrySet(entrySets) {
 		siblings.PushLeft(EntrySet{entry.GetKey().(int) + 1: entry.GetValue()})
 	}
