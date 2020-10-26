@@ -7,7 +7,7 @@ import (
 	"errors"
 	. "eagle/service/common"
 	"eagle/service/corpus/io"
-	ByteArray "eagle/service/corpus/io/byteArray"
+	"eagle/service/corpus/io/ByteArray"
 	"github.com/gogf/gf/container/glist"
 	"github.com/gogf/gf/util/gconv"
 	"time"

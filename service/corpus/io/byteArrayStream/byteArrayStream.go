@@ -2,7 +2,8 @@ package ByteArrayStream
 
 import (
 	"eagle/service/common"
-	. "eagle/service/corpus/io/byteArray"
+	"eagle/service/corpus/io"
+	. "eagle/service/corpus/io/ByteArray"
 	"eagle/service/config"
 	"eagle/utils"
 )
@@ -10,13 +11,12 @@ import (
 type ByteArrayStream struct {
 	ByteArray
 
-	bufferSize int
-
+	BufferSize int
 }
 
 func NewByteArrayStream(bytes []byte, bufferSize int) *ByteArrayStream {
 	bas := &ByteArrayStream{
-		bufferSize: bufferSize,
+		BufferSize: bufferSize,
 		ByteArray: ByteArray{
 			Bytes:bytes,
 		},
@@ -34,7 +34,9 @@ func CreateByteArrayStream(path string) *ByteArrayStream {
 		utils.Logger.Warning("打开失败： " + path)
 		return nil
 	}
-
+	if is.(type) == io.FileInputStream {
+		return
+	}
 }
 
 func (bas *ByteArrayStream) NextInt() int {

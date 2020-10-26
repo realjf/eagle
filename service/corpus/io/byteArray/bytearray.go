@@ -1,4 +1,4 @@
-package byteArray
+package ByteArray
 
 import (
 	. "eagle/service/common"
@@ -11,7 +11,7 @@ import (
 // 对字节数组进行封装，提供方便的读取操作
 type ByteArray struct {
 	Bytes []byte // 当前字节数组，不一定是全部字节，可能只是一个片段
-	offset int // 当前已读取的字节数，或下一个字节的指针
+	Offset int // 当前已读取的字节数，或下一个字节的指针
 }
 
 func NewByteArray(bytes []byte) *ByteArray {
@@ -37,28 +37,28 @@ func (ba *ByteArray) GetBytes() []byte {
 
 // 读取一个int
 func (ba *ByteArray) NextInt() int {
-	result := byteUtility.BytesHighFirstToInt(ba.Bytes, ba.offset)
-	ba.offset += 4
+	result := byteUtility.BytesHighFirstToInt(ba.Bytes, ba.Offset)
+	ba.Offset += 4
 	return result
 }
 
 func (ba *ByteArray) NextFloat64() float64 {
-	result := byteUtility.BytesHighFirstToFloat64(ba.Bytes, ba.offset)
+	result := byteUtility.BytesHighFirstToFloat64(ba.Bytes, ba.Offset)
 	result += 8
 	return result
 }
 
 // 读取一个char，对应于writeChar
 func (ba *ByteArray) NextChar() Char {
-	result := byteUtility.BytesHighFirstToChar(ba.Bytes, ba.offset)
-	ba.offset += 2
+	result := byteUtility.BytesHighFirstToChar(ba.Bytes, ba.Offset)
+	ba.Offset += 2
 	return result
 }
 
 // 读取一个字节
 func (ba *ByteArray) NextByte() byte {
-	result := ba.Bytes[ba.offset]
-	ba.offset++
+	result := ba.Bytes[ba.Offset]
+	ba.Offset++
 	return result
 }
 
@@ -69,7 +69,7 @@ func (ba *ByteArray) NextBoolean() bool {
 
 
 func (ba *ByteArray) HasMore() bool {
-	return ba.offset < len(ba.Bytes)
+	return ba.Offset < len(ba.Bytes)
 }
 
 func (ba *ByteArray) NextString() string {
@@ -82,8 +82,8 @@ func (ba *ByteArray) NextString() string {
 }
 
 func (ba *ByteArray) NextFloat() float32 {
-	result := byteUtility.BytesHighFirstToFloat(ba.Bytes, ba.offset)
-	ba.offset += 4
+	result := byteUtility.BytesHighFirstToFloat(ba.Bytes, ba.Offset)
+	ba.Offset += 4
 	return result
 }
 
@@ -166,7 +166,7 @@ func (ba *ByteArray) NextUTF() string {
 
 
 func (ba *ByteArray) GetOffset() int {
-	return ba.offset
+	return ba.Offset
 }
 
 func (ba *ByteArray) GetLength() int {

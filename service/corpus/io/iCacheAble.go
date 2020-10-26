@@ -1,6 +1,6 @@
 package io
 
-import ByteArray "eagle/service/corpus/io/byteArray"
+import ByteArray "eagle/service/corpus/io/ByteArray"
 
 /**
  * 可写入或读取二进制

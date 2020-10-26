@@ -2,7 +2,7 @@ package dictionary
 
 import (
 	"eagle/service/corpus/io"
-	ByteArray "eagle/service/corpus/io/byteArray"
+	"eagle/service/corpus/io/ByteArray"
 	. "eagle/service/corpus/tag"
 	"eagle/utils"
 	"github.com/gogf/gf/text/gstr"
