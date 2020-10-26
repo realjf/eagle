@@ -3,7 +3,7 @@ package ahocorasick
 import (
 	. "eagle/service/common"
 	"eagle/service/corpus/io"
-	"gifs/service/corpus/io/byteArray"
+	"eagle/service/corpus/io/byteArray"
 	"github.com/gogf/gf/container/glist"
 	"github.com/gogf/gf/container/gmap"
 )
@@ -137,7 +137,7 @@ func (a *AhoCorasickDoubleArrayTrie) Load() {
  * @param value     值数组
  * @return 成功与否
  */
-func (a *AhoCorasickDoubleArrayTrie) Load2(byteArray ByteArray.ByteArray, value []interface{}) bool {
+func (a *AhoCorasickDoubleArrayTrie) Load2(byteArray byteArray.ByteArray, value []interface{}) bool {
 	if byteArray.GetLength() == 0 {
 		return false
 	}
